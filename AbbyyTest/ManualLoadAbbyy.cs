@@ -44,7 +44,7 @@ public class ManualLoadAbbyy : IDisposable
                 dllCanUnloadNowPtr, typeof(DllCanUnloadNow));
 
             // Call the InitializeEngine function
-            int hresult = _initializeEngineFunc("", "", "", "", "", false,
+            int hresult = _initializeEngineFunc(Program.CustomProjectId, "", Program.LicensePassword, "", "", false,
                 ref engine);
             Marshal.ThrowExceptionForHR(hresult);
 

@@ -19,6 +19,7 @@ public static class AbbyyFunctions
         var document = engine.CreateFRDocument();
         document.AddImageFile("Page_01.jpg");
         document.Process();
+
         foreach (FRPage page in document.Pages)
         {
             foreach (IBlock block in page.Layout.Blocks)
@@ -30,27 +31,15 @@ public static class AbbyyFunctions
 
                 foreach (IParagraph paragraph in textBlock.Text.Paragraphs)
                 {
-                    var wordsInCurrentLine = new List<string>();
-                    var lines = paragraph.Lines.GetEnumerator();
-                    lines.MoveNext();
-                    var line = (IParagraphLine) lines.Current;
                     for (var i = 0; i < paragraph.Words.Count; i++)
                     {
                         var word = paragraph.Words[i];
-                        if (word.Region.IsEmpty)
-                            continue;
-                        while (word.FirstSymbolPosition >= line.FirstCharIndex + line.CharactersCount)
+                        for (var iChar = word.FirstSymbolPosition;
+                            iChar < word.FirstSymbolPosition + word.Text.Length;
+                            iChar++)
                         {
-                            //We need to get lineBox and lineText
-                            int[] lineBox = new int[4]
-                                {line.Left, line.Top, line.Right, line.Bottom};
-                            var lineText = String.Join(" ", wordsInCurrentLine);
-                            lines.MoveNext();
-                            line = (IParagraphLine) lines.Current;
-                            wordsInCurrentLine = new List<string>();
+                            paragraph.GetCharParams(iChar,engine.CreateCharParams());
                         }
-
-                        wordsInCurrentLine.Add(word.Text);
                     }
                 }
             }
@@ -58,5 +47,4 @@ public static class AbbyyFunctions
 
         document.Close();
     }
-
 }

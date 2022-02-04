@@ -8,7 +8,7 @@ public class InprocLoadAbbyy : IDisposable
 
     public InprocLoadAbbyy()
     {
-        Engine = _loader.InitializeEngine("", "", "");
+        Engine = _loader.InitializeEngine(Program.CustomProjectId, "", Program.LicensePassword);
     }
 
     public void Dispose()

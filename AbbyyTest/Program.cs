@@ -5,37 +5,39 @@ public class Program
 {
     private static readonly Stopwatch _stopwatch = new Stopwatch();
 
-    public static void Main()
+    public static void Main(string[] args)
     {
-        Console.WriteLine("Hello, World!");
+        if (args.Length != 2)
+        {
+            throw new ArgumentException(
+                $"Run with the following arguments: {nameof(CustomProjectId)} {nameof(LicensePassword)}");
+        }
 
-        // MeasureTime(() =>
-        //     {
-        //         using (var loader = new ManualLoadAbbyy())
-        //         {
-        //             // AbbyyFunctions.ProcessDocument(loader.Engine);
-        //             AbbyyFunctions.ProcessAndParseDocument(loader.Engine);
-        //         }
-        //     }, "ManualLoader"
-        // );
+        CustomProjectId = args[0];
+        LicensePassword = args[1];
 
+        Console.WriteLine("Starting computation");
 
         MeasureTime(() =>
             {
                 using (var loader = new InprocLoadAbbyy())
+                // using (var loader = new ManualLoadAbbyy())
                 {
                     // AbbyyFunctions.ProcessDocument(loader.Engine);
                     AbbyyFunctions.ProcessAndParseDocument(loader.Engine);
                 }
-            }, "InprocLoader"
+            }
         );
     }
 
-    public static void MeasureTime(Action action, string processTag)
+    public static void MeasureTime(Action action)
     {
         _stopwatch.Restart();
         action();
         _stopwatch.Stop();
-        Console.WriteLine($"Process \"{processTag}\" took {_stopwatch.Elapsed}");
+        Console.WriteLine($"Process took {_stopwatch.Elapsed}");
     }
+
+    public static string CustomProjectId = "";
+    public static string LicensePassword = "";
 }
