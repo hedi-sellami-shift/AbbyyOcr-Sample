@@ -18,17 +18,25 @@ public class Program
 
         Console.WriteLine("Starting computation");
 
+        // We want to compare computation time between an engine loaded manually, and one loaded using InprocLoader
+
         MeasureTime(() =>
             {
-                using (var loader = new InprocLoadAbbyy())
-                // using (var loader = new ManualLoadAbbyy())
+                // using (var loader = new InprocLoadAbbyy())
+                using (var loader = new ManualLoadAbbyy())
                 {
-                    // AbbyyFunctions.ProcessDocument(loader.Engine);
-                    AbbyyFunctions.ProcessAndParseDocument(loader.Engine);
+                    AbbyyFunctions.ProcessDocument(loader.Engine);      // Process the document and return without extracting the result
+                    // AbbyyFunctions.ProcessAndParseDocument(loader.Engine);      // Process the document and parse it for the information we need
                 }
             }
         );
     }
+
+    /// Results:
+    // ManualLoader, Process: 4.44s
+    // InprocLoader, Process: 4.44s
+    // ManualLoader, Process and Parse: 4.45s
+    // InprocLoader, Process and Parse: 7.57.s
 
     public static void MeasureTime(Action action)
     {
